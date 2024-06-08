@@ -1,3 +1,5 @@
+import webpack from 'webpack'
+
 import path from 'path'
 import { fileURLToPath } from 'url'
 
@@ -9,9 +11,11 @@ const isProduction = 'production'
 
 
 const config = {
-    entry: './src/employees.jsx',
+    entry: {
+        employees: './src/employees.jsx',
+    },
     output: {
-        filename: 'employees.bundle.js',
+        filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'public'),
 
     },
@@ -20,10 +24,18 @@ const config = {
         rules: [
             {
                 test: /\.jsx?$/,
+                exclude: /node_modules/,
                 loader: 'babel-loader', //if you see any jsx files use the babel loader
             },
         ]
-    }
+    },
+    optimization: {
+        splitChunks: {
+            name: 'vendor', // will not rebuild node_modules
+            chunks: 'all',
+        },
+    },
+    devtool: 'source-map'
 
 }
 

@@ -7,11 +7,11 @@ import routes from './routes/routes.js'
 import {} from './db/connect.js' // M6 lecture 2 method 1 mongoose
 import connectDB from './db/connect.js'   // M6 lecture 2 method 2 mongoose
 import bodyParser from 'body-parser'
+import path from 'path'
 
 const app = express()
 
 // LOAD STATIC FILES
-import path from 'path'
 import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url) 
 const __dirname = path.dirname(__filename)
@@ -30,6 +30,10 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json()) //without this middleware, wouldn't be able to decipher data being sent to node from an application
 app.use('/', routes)
 
+
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve('public/index.html'))
+})
 
 const PORT = process.env.PORT || 8000
 //app.listen(PORT, () => console.log(`Listening on port: ${PORT}`)) // M6 lecture 2 method 1 mongoose

@@ -1,51 +1,92 @@
+import React from 'react'
+import { Button, Container, Row, Col, Modal } from 'react-bootstrap'
+
 export default class EmployeeAdd extends React.Component {
     constructor() {
         super()
+        this.state = {
+            modalVisible: false,
+        }
         this.handleSubmit = this.handleSubmit.bind(this)
-        /*
-        setTimeout(() => {
-            this.props.createEmployee(sampleEmployee)
-        }, 2000
+        this.handleShowModal = this.handleShowModal.bind(this)
+        this.handleHideModal = this.handleHideModal.bind(this)
+    }
 
-        )
-        this.state = { employees: [] } //using hard-coded array to initialize state
-        */
+    handleShowModal() {
+        this.setState({ modalVisible: true, })
+    }
 
+    handleHideModal() {
+        this.setState({ modalVisible: false, })
     }
 
     handleSubmit(e) {
-        e.preventDefault()
         const form = document.forms.employeeAdd
         const employee = {
             name: form.name.value,
             extension: form.ext.value,
             email: form.email.value,
             title: form.title.value,
-   
-
         }
         this.props.createEmployee(employee)
         form.name.value = ''
         form.ext.value = ''
         form.email.value = ''
         form.title.value = ''
-
-
+        this.setState({ modalVisible: false, })
     }
+    render() {
+        return (
+            <>
+                <div className="addEmployee">
+                    <Button                          
+                        variant="primary" 
+                        size="sm" 
+                        onClick={this.handleShowModal}>
+                            New Employee
+                    </Button>
+                </div>
 
-	render() {
-        return(
-            <form name="employeeAdd" onSubmit={this.handleSubmit}>
-                Name: <input type="text" name="name" /><br/>
-                Extension: <input type="text" name="ext" maxLength={4} /><br/>
-                Email: <input type="text" name="email" /><br/>
-                Title: <input type="text" name="title" /><br/>
-                <button>Add</button>
+                <Modal show={this.state.modalVisible} onHide={this.handleHideModal} centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Add New Employee</Modal.Title>
+                    </Modal.Header>
 
+                    <Modal.Body>
+                        <Container fluid>
+                            <form name="employeeAdd">
+                                <Row>
+                                    <Col md={3}>Name:</Col>
+                                    <Col md="auto"><input type="text" name="name" /></Col>
+                                </Row>
+                                <Row>
+                                    <Col md={3}>Extension:</Col>
+                                    <Col md="auto"><input type="text" name="ext" maxLength={4} /></Col>
+                                </Row>
+                                <Row>
+                                    <Col md={3}>Email:</Col>
+                                    <Col md="auto"><input type="text" name="email" /></Col>
+                                </Row>
+                                <Row>
+                                    <Col md={3}>Title:</Col>
+                                    <Col md="auto"><input type="text" name="title" /></Col>
+                                </Row>
+                            </form>
+                        </Container>
+                    </Modal.Body>
 
-            </form>
+                    <Modal.Footer>
+                        <Button 
+                            type="submit" 
+                            variant="success" 
+                            size="sm" 
+                            className="mt-4" 
+                            onClick={this.handleSubmit}>
+                                Add Employee
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </>
         )
-		//return(<div>This is a placeholder for the employee add form.</div>)
     }
-	
 }
